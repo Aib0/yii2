@@ -1,6 +1,8 @@
 <?php
 /**
- * @author Carsten Brandt <mail@cebe.cc>
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
  */
 
 namespace yiiunit\framework\log;
@@ -25,7 +27,7 @@ class TargetTest extends TestCase
             [['levels' => 0], ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']],
             [
                 ['levels' => Logger::LEVEL_INFO | Logger::LEVEL_WARNING | Logger::LEVEL_ERROR | Logger::LEVEL_TRACE],
-                ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+                ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
             ],
             [['levels' => ['error']], ['B', 'G', 'H']],
             [['levels' => Logger::LEVEL_ERROR], ['B', 'G', 'H']],
@@ -49,12 +51,14 @@ class TargetTest extends TestCase
 
     /**
      * @dataProvider filters
+     * @param array $filter
+     * @param array $expected
      */
     public function testFilter($filter, $expected)
     {
         static::$messages = [];
 
-        $logger = new Logger;
+        $logger = new Logger();
         $dispatcher = new Dispatcher([
             'logger' => $logger,
             'targets' => [new TestTarget(array_merge($filter, ['logVars' => []]))],
@@ -122,6 +126,82 @@ class TargetTest extends TestCase
         $this->assertNotContains('E_a', $context);
         $this->assertNotContains('E_b', $context);
         $this->assertNotContains('E_c', $context);
+    }
+
+    /**
+     * @covers \yii\log\Target::setLevels()
+     * @covers \yii\log\Target::getLevels()
+     */
+    public function testSetupLevelsThroughArray()
+    {
+        $target = $this->getMockForAbstractClass('yii\\log\\Target');
+
+        $target->setLevels(['info', 'error']);
+        $this->assertEquals(Logger::LEVEL_INFO | Logger::LEVEL_ERROR, $target->getLevels());
+
+        $target->setLevels(['trace']);
+        $this->assertEquals(Logger::LEVEL_TRACE, $target->getLevels());
+
+        $this->expectException('yii\\base\\InvalidConfigException');
+        $this->expectExceptionMessage('Unrecognized level: unknown level');
+        $target->setLevels(['info', 'unknown level']);
+    }
+
+    /**
+     * @covers \yii\log\Target::setLevels()
+     * @covers \yii\log\Target::getLevels()
+     */
+    public function testSetupLevelsThroughBitmap()
+    {
+        $target = $this->getMockForAbstractClass('yii\\log\\Target');
+
+        $target->setLevels(Logger::LEVEL_INFO | Logger::LEVEL_WARNING);
+        $this->assertEquals(Logger::LEVEL_INFO | Logger::LEVEL_WARNING, $target->getLevels());
+
+        $target->setLevels(Logger::LEVEL_TRACE);
+        $this->assertEquals(Logger::LEVEL_TRACE, $target->getLevels());
+
+        $this->expectException('yii\\base\\InvalidConfigException');
+        $this->expectExceptionMessage('Incorrect 128 value');
+        $target->setLevels(128);
+    }
+
+    public function testGetEnabled()
+    {
+        /** @var Target $target */
+        $target = $this->getMockForAbstractClass('yii\\log\\Target');
+
+        $target->enabled = true;
+        $this->assertTrue($target->enabled);
+
+        $target->enabled = false;
+        $this->assertFalse($target->enabled);
+
+        $target->enabled = function ($target) {
+            return empty($target->messages);
+        };
+        $this->assertTrue($target->enabled);
+    }
+
+    public function testFormatMessage()
+    {
+        /** @var Target $target */
+        $target = $this->getMockForAbstractClass('yii\\log\\Target');
+
+        $text = 'message';
+        $level = Logger::LEVEL_INFO;
+        $category = 'application';
+        $timestamp = 1508160390.6083;
+
+        $expectedWithoutMicro = '2017-10-16 13:26:30 [info][application] message';
+        $formatted = $target->formatMessage([$text, $level, $category, $timestamp]);
+        $this->assertSame($expectedWithoutMicro, $formatted);
+
+        $target->microtime = true;
+
+        $expectedWithMicro = '2017-10-16 13:26:30.6083 [info][application] message';
+        $formatted = $target->formatMessage([$text, $level, $category, $timestamp]);
+        $this->assertSame($expectedWithMicro, $formatted);
     }
 }
 

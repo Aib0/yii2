@@ -60,7 +60,7 @@ public function init()
 {
     parent::init();
     // initialize the module with the configuration loaded from config.php
-    \Yii::configure($this, require(__DIR__ . '/config.php'));
+    \Yii::configure($this, require __DIR__ . '/config.php');
 }
 ```
 
@@ -101,7 +101,7 @@ class PostController extends Controller
 
 You may customize the namespace of controller classes by configuring the [[yii\base\Module::controllerNamespace]]
 property. In case some of the controllers are outside of this namespace, you may make them accessible
-by configuring the [[yii\base\Module::controllerMap]] property, similar to [what you do in an application](structure-applications.md#controllerMap).
+by configuring the [[yii\base\Module::controllerMap]] property, similar to [what you do in an application](structure-applications.md#controller-map).
 
 
 ### Views in Modules <span id="views-in-modules"></span>
@@ -125,7 +125,7 @@ Your module may also declare commands, that will be available through the [Conso
 In order for the command line utility to see your commands, you will need to change the [[yii\base\Module::controllerNamespace]]
 property, when Yii is executed in the console mode, and point it to your commands namespace.
 
-One way to achieve that is to test the instance type of the Yii application in the module's `init` method:
+One way to achieve that is to test the instance type of the Yii application in the module's `init()` method:
 
 ```php
 public function init()
@@ -188,7 +188,7 @@ $module = MyModuleClass::getInstance();
 
 where `MyModuleClass` refers to the name of the module class that you are interested in. The `getInstance()` method
 will return the currently requested instance of the module class. If the module is not requested, the method will
-return null. Note that you do not want to manually create a new instance of the module class because it will be
+return `null`. Note that you do not want to manually create a new instance of the module class because it will be
 different from the one created by Yii in response to a request.
 
 > Info: When developing a module, you should not assume the module will use a fixed ID. This is because a module
@@ -269,6 +269,34 @@ in the `admin` module which is a child module of the `forum` module.
 to its parent. The [[yii\base\Application::loadedModules]] property keeps a list of loaded modules, including both
 direct children and nested ones, indexed by their class names.
 
+## Accessing components from within modules
+
+Since version 2.0.13 modules support [tree traversal](concept-service-locator.md#tree-traversal). This allows module 
+developers to reference (application) components via the service locator that is their module.
+This means that it is preferable to use `$module->get('db')` over `Yii::$app->get('db')`.
+The user of a module is able to specify a specific component to be used for the module in case a different component
+(configuration) is required.
+
+For example consider this application configuration:
+
+```php
+'components' => [
+    'db' => [
+        'tablePrefix' => 'main_',
+    ],
+],
+'modules' => [
+    'mymodule' => [
+        'components' => [
+            'db' => [
+                'tablePrefix' => 'module_',
+            ],
+        ],
+    ],
+],
+```
+
+The application database tables will be prefixed with `main_`, while all module tables will be prefixed with `module_`.
 
 ## Best Practices <span id="best-practices"></span>
 

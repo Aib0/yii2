@@ -1,13 +1,17 @@
 <?php
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
 
-return
-        $code = <<<CODE
+return <<<CODE
 <?php
 
 use yii\db\Migration;
 
 /**
- * Handles the creation for table `post_tag`.
+ * Handles the creation of table `post_tag`.
  * Has foreign keys to the tables:
  *
  * - `post`

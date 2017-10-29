@@ -98,7 +98,7 @@ public function fields()
 
 ### Overriding `extraFields()` <span id="overriding-extra-fields"></span>
 
-By default, [[yii\base\Model::extraFields()]] returns nothing, while [[yii\db\ActiveRecord::extraFields()]]
+By default, [[yii\base\Model::extraFields()]] returns an empty array, while [[yii\db\ActiveRecord::extraFields()]]
 returns the names of the relations that have been populated from DB.
 
 The return data format of `extraFields()` is the same as that of `fields()`. Usually, `extraFields()`
@@ -137,7 +137,7 @@ the request with `http://localhost/users?fields=id,email&expand=profile` may ret
 ## Links <span id="links"></span>
 
 [HATEOAS](http://en.wikipedia.org/wiki/HATEOAS), an abbreviation for Hypermedia as the Engine of Application State,
-promotes that RESTful APIs should return information that allow clients to discover actions supported for the returned
+promotes that RESTful APIs should return information that allows clients to discover actions supported for the returned
 resources. The key of HATEOAS is to return a set of hyperlinks with relation information when resource data are served
 by the APIs.
 
@@ -146,23 +146,41 @@ contains a single method [[yii\web\Linkable::getLinks()|getLinks()]] which shoul
 Typically, you should return at least the `self` link representing the URL to the resource object itself. For example,
 
 ```php
-use yii\db\ActiveRecord;
-use yii\web\Link;
+use yii\base\Model;
+use yii\web\Link; // represents a link object as defined in JSON Hypermedia API Language.
 use yii\web\Linkable;
 use yii\helpers\Url;
 
-class User extends ActiveRecord implements Linkable
+class UserResource extends Model implements Linkable
 {
+    public $id;
+    public $email;
+
+    //...
+
+    public function fields()
+    {
+        return ['id', 'email'];
+    }
+
+    public function extraFields()
+    {
+        return ['profile'];
+    }
+
     public function getLinks()
     {
         return [
             Link::REL_SELF => Url::to(['user/view', 'id' => $this->id], true),
+            'edit' => Url::to(['user/view', 'id' => $this->id], true),
+            'profile' => Url::to(['user/profile/view', 'id' => $this->id], true),
+            'index' => Url::to(['users'], true),
         ];
     }
 }
 ```
 
-When a `User` object is returned in a response, it will contain a `_links` element representing the links related
+When a `UserResource` object is returned in a response, it will contain a `_links` element representing the links related
 to the user, for example,
 
 ```
@@ -173,6 +191,15 @@ to the user, for example,
     "_links" => {
         "self": {
             "href": "https://example.com/users/100"
+        },
+        "edit": {
+            "href": "https://example.com/users/100"
+        },
+        "profile": {
+            "href": "https://example.com/users/profile/100"
+        },
+        "index": {
+            "href": "https://example.com/users"
         }
     }
 }
@@ -217,4 +244,14 @@ will also include the pagination information by the following HTTP headers:
 * `X-Pagination-Per-Page`: The number of resources in each page;
 * `Link`: A set of navigational links allowing client to traverse the resources page by page.
 
+Since collection in REST APIs is a data provider, it shares all data provider features i.e. pagination and sorting.
+
 An example may be found in the [Quick Start](rest-quick-start.md#trying-it-out) section.
+
+### Filtering collections <span id="filtering-collections"></span>
+
+Since version 2.0.13 Yii provides a facility to filter collections. An example can be found in the
+[Quick Start](rest-quick-start.md#trying-it-out) guide. In case you're implementing an endpoint yourself,
+filtering could be done as described in
+[Filtering Data Providers using Data Filters](output-data-providers.md#filtering-data-providers-using-data-filters)
+section of Data Providers guide.

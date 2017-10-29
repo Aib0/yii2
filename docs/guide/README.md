@@ -30,7 +30,7 @@ Getting Started
 Application Structure
 ---------------------
 
-* [Overview](structure-overview.md)
+* [Application Structure Overview](structure-overview.md)
 * [Entry Scripts](structure-entry-scripts.md)
 * [Applications](structure-applications.md)
 * [Application Components](structure-application-components.md)
@@ -47,7 +47,7 @@ Application Structure
 Handling Requests
 -----------------
 
-* [Overview](runtime-overview.md)
+* [Request Handling Overview](runtime-overview.md)
 * [Bootstrapping](runtime-bootstrapping.md)
 * [Routing and URL Creation](runtime-routing.md)
 * [Requests](runtime-requests.md)
@@ -92,6 +92,7 @@ Getting Data from Users
 * [Uploading Files](input-file-upload.md)
 * [Collecting Tabular Input](input-tabular-input.md)
 * [Getting Data for Multiple Models](input-multiple-models.md)
+* [Extending ActiveForm on the Client Side](input-form-javascript.md)
 
 
 Displaying Data
@@ -109,12 +110,11 @@ Displaying Data
 Security
 --------
 
-* [Overview](security-overview.md)
+* [Security Overview](security-overview.md)
 * [Authentication](security-authentication.md)
 * [Authorization](security-authorization.md)
 * [Working with Passwords](security-passwords.md)
 * [Cryptography](security-cryptography.md)
-* [Views security](structure-views.md#security)
 * [Auth Clients](https://github.com/yiisoft/yii2-authclient/blob/master/docs/guide/README.md)
 * [Best Practices](security-best-practices.md)
 
@@ -122,7 +122,7 @@ Security
 Caching
 -------
 
-* [Overview](caching-overview.md)
+* [Caching Overview](caching-overview.md)
 * [Data Caching](caching-data.md)
 * [Fragment Caching](caching-fragment.md)
 * [Page Caching](caching-page.md)
@@ -148,13 +148,13 @@ Development Tools
 
 * [Debug Toolbar and Debugger](https://github.com/yiisoft/yii2-debug/blob/master/docs/guide/README.md)
 * [Generating Code using Gii](https://github.com/yiisoft/yii2-gii/blob/master/docs/guide/README.md)
-* **TBD** [Generating API Documentation](https://github.com/yiisoft/yii2-apidoc)
+* [Generating API Documentation](https://github.com/yiisoft/yii2-apidoc)
 
 
 Testing
 -------
 
-* [Overview](test-overview.md)
+* [Testing Overview](test-overview.md)
 * [Testing environment setup](test-environment-setup.md)
 * [Unit Tests](test-unit.md)
 * [Functional Tests](test-functional.md)
@@ -175,19 +175,20 @@ Special Topics
 * [Shared Hosting Environment](tutorial-shared-hosting.md)
 * [Template Engines](tutorial-template-engines.md)
 * [Working with Third-Party Code](tutorial-yii-integration.md)
+* [Using Yii as a micro framework](tutorial-yii-as-micro-framework.md)
 
 
 Widgets
 -------
 
-* GridView: **TBD** link to demo page
-* ListView: **TBD** link to demo page
-* DetailView: **TBD** link to demo page
-* ActiveForm: **TBD** link to demo page
-* Pjax: **TBD** link to demo page
-* Menu: **TBD** link to demo page
-* LinkPager: **TBD** link to demo page
-* LinkSorter: **TBD** link to demo page
+* [GridView](http://www.yiiframework.com/doc-2.0/yii-grid-gridview.html)
+* [ListView](http://www.yiiframework.com/doc-2.0/yii-widgets-listview.html)
+* [DetailView](http://www.yiiframework.com/doc-2.0/yii-widgets-detailview.html)
+* [ActiveForm](http://www.yiiframework.com/doc-2.0/guide-input-forms.html#activerecord-based-forms-activeform)
+* [Pjax](http://www.yiiframework.com/doc-2.0/yii-widgets-pjax.html)
+* [Menu](http://www.yiiframework.com/doc-2.0/yii-widgets-menu.html)
+* [LinkPager](http://www.yiiframework.com/doc-2.0/yii-widgets-linkpager.html)
+* [LinkSorter](http://www.yiiframework.com/doc-2.0/yii-widgets-linksorter.html)
 * [Bootstrap Widgets](https://github.com/yiisoft/yii2-bootstrap/blob/master/docs/guide/README.md)
 * [jQuery UI Widgets](https://github.com/yiisoft/yii2-jui/blob/master/docs/guide/README.md)
 
@@ -195,7 +196,7 @@ Widgets
 Helpers
 -------
 
-* [Overview](helper-overview.md)
+* [Helpers Overview](helper-overview.md)
 * [ArrayHelper](helper-array.md)
 * [Html](helper-html.md)
 * [Url](helper-url.md)

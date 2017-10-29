@@ -1,24 +1,30 @@
 <?php
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
 
 namespace yiiunit\framework\db\mssql;
 
 use yii\db\ColumnSchemaBuilder;
-use yii\db\Schema;
 
 /**
- * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MSSQL
+ * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MSSQL.
  * @group db
  * @group mssql
  */
 class ColumnSchemaBuilderTest extends \yiiunit\framework\db\ColumnSchemaBuilderTest
 {
+    public $driverName = 'sqlsrv';
+
     /**
      * @param string $type
-     * @param integer $length
+     * @param int $length
      * @return ColumnSchemaBuilder
      */
     public function getColumnSchemaBuilder($type, $length = null)
     {
-        return new ColumnSchemaBuilder($type, $length);
+        return new ColumnSchemaBuilder($type, $length, $this->getConnection());
     }
 }
