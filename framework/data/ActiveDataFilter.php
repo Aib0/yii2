@@ -66,7 +66,7 @@ class ActiveDataFilter extends DataFilter
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function buildInternal()
     {
@@ -145,7 +145,7 @@ class ActiveDataFilter extends DataFilter
         }
         return [
             $operator,
-            $this->buildCondition($condition)
+            $this->buildCondition($condition),
         ];
     }
 
